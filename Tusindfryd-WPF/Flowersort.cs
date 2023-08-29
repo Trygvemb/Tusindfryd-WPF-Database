@@ -27,6 +27,7 @@ namespace Tusindfryd_WPF
             Size = size;
         }
 
+        // Skriver SQL i C#. Husk at Tabellen Flowersorts skal laves i MSSMS og have de samme colonne navne som i Flowersorts
         public void InsertIntoDatabase(string connectionString)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

@@ -42,9 +42,11 @@ namespace Tusindfryd_WPF
                 Convert.ToInt32(dialog.tbHalfLife.Text),
                 Convert.ToInt32(dialog.tbSize.Text));
 
-                IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                // Configurerer Databasen. husk at bruge de 3 using statements; System.Data; Microsoft.Extensions.Configuration.Json; Microsoft.Extensions.Configuration;
+                IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build(); // Husk at selve json filen skal have navnet appsettings.json
                 string connectionString = config.GetConnectionString("MyDBConnection");
 
+                // Gemmer informationen i databsen
                 flowersort.InsertIntoDatabase(connectionString);
 
                 flowersorts.Add(flowersort);
