@@ -12,13 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Tusindfryd_WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         List<Flowersort> flowersorts;
@@ -39,6 +41,11 @@ namespace Tusindfryd_WPF
                 Convert.ToInt32(dialog.tbProductionTime.Text),
                 Convert.ToInt32(dialog.tbHalfLife.Text),
                 Convert.ToInt32(dialog.tbSize.Text));
+
+                IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                string connectionString = config.GetConnectionString("MyDBConnection");
+
+                flowersort.InsertIntoDatabase(connectionString);
 
                 flowersorts.Add(flowersort);
             }
