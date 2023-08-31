@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
+using System.Data.Common;
 
 
 namespace Tusindfryd_WPF
@@ -26,8 +27,38 @@ namespace Tusindfryd_WPF
         List<Flowersort> flowersorts;
         public MainWindow()
         {
+            IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build(); // Husk at selve json filen skal have navnet appsettings.json
+            string connectionString = config.GetConnectionString("MyDBConnection");
             InitializeComponent();
             flowersorts = new List<Flowersort>();
+            RetrieveAll(connectionString);
+            AddToTextBlock();
+        }
+
+        public void RetrieveAll(string connectionString)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Name, PicturePath, ProductionTime, HalfLife, Size FROM Flowersorts", con);
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Flowersort flowersort = new Flowersort(
+
+                            dr["Name"].ToString(),
+                            dr["PicturePath"].ToString(),
+                            int.Parse(dr["ProductionTime"].ToString()),
+                            int.Parse(dr["HalfLife"].ToString()),
+                            int.Parse(dr["Size"].ToString())
+                            );
+
+                        flowersorts.Add(flowersort);
+                    }
+
+                }
+            }
         }
 
         private void bOpret_Click(object sender, RoutedEventArgs e)
@@ -46,7 +77,7 @@ namespace Tusindfryd_WPF
                 IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build(); // Husk at selve json filen skal have navnet appsettings.json
                 string connectionString = config.GetConnectionString("MyDBConnection");
 
-                // Gemmer informationen i databsen
+                // kaller metoden og Gemmer informationen i databsen
                 flowersort.InsertIntoDatabase(connectionString);
 
                 flowersorts.Add(flowersort);
@@ -64,5 +95,7 @@ namespace Tusindfryd_WPF
             }
             tbSorter.Text = line;
         }
+
+
     }
 }

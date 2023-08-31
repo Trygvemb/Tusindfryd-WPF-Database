@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
+using System.Runtime.ConstrainedExecution;
 
 namespace Tusindfryd_WPF
 {
@@ -49,6 +50,8 @@ namespace Tusindfryd_WPF
             }
         }
 
-    }
+        
 
+
+    }
 }
