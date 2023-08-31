@@ -35,13 +35,14 @@ namespace Tusindfryd_WPF
             AddToTextBlock();
         }
 
+        // Henter data fra dabasen og skriver det ind i flowersorts listen. Jeg var noed til at lave metoden her da jeg ellers ikke kunne tilgaa flowersorts listen.
         public void RetrieveAll(string connectionString)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Name, PicturePath, ProductionTime, HalfLife, Size FROM Flowersorts", con);
-                using (SqlDataReader dr = cmd.ExecuteReader())
+                SqlCommand cmd = new SqlCommand("SELECT Name, PicturePath, ProductionTime, HalfLife, Size FROM Flowersorts", con);//skriver SQL i C#
+                using (SqlDataReader dr = cmd.ExecuteReader())  // laeser dataen
                 {
                     while (dr.Read())
                     {
@@ -54,7 +55,7 @@ namespace Tusindfryd_WPF
                             int.Parse(dr["Size"].ToString())
                             );
 
-                        flowersorts.Add(flowersort);
+                        flowersorts.Add(flowersort);// tilfoejer det hentede hata til flowersorts 
                     }
 
                 }
